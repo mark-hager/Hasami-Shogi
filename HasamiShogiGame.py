@@ -353,7 +353,7 @@ class HasamiShogiGame:
         """
         if player == "RED":
             player = "BLACK"
-        if player == "BLACK":
+        elif player == "BLACK":
             player = "RED"
         self._captured_pieces[player] += pawns_captured
         # call set_game_status to see if either player has won!
@@ -426,10 +426,21 @@ new_game.make_move('b3','b2')
 new_game.make_move('a3','h3')
 new_game.make_move('i2','i1')
 new_game.make_move('g1','h1')
+# following move correctly gives corner capture point to black
 new_game.make_move('b2','a2')
+print("RED PAWNS CAPPED", new_game.get_num_captured_pieces("RED"))
+print("BLACK PAWNS CAPPED", new_game.get_num_captured_pieces("BLACK"))
+
 new_game.make_move('h3','i3')
 new_game.make_move('i9','b9')
+new_game.print_board()
+# following move incorrectly gives corner capture point to red
 new_game.make_move('i3','i2')
+new_game.print_board()
+print("RED PAWNS CAPPED", new_game.get_num_captured_pieces("RED"))
+print("BLACK PAWNS CAPPED", new_game.get_num_captured_pieces("BLACK"))
+"""
 new_game.print_board()
 print("RED CAPPED", new_game.get_num_captured_pieces("RED"))
 print("BLACK CAPPED", new_game.get_num_captured_pieces("BLACK"))
+"""
