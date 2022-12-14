@@ -3,6 +3,10 @@
 # Description: Variant 1 Hasami Shogi Game with the following rules:
 # https://en.wikipedia.org/wiki/Hasami_shogi#Variant_1
 
+# import our Pygame classes to render the game
+from PyGameRenderer import *
+
+
 class HasamiShogiGame:
     """
     Represents a game of Hasami Shogi, with methods to initialize and print the board, pawn position,
@@ -13,6 +17,7 @@ class HasamiShogiGame:
         Creates a new game of Hasami Shogi with private data members for the game state, the player turn,
         and the number of captured pieces per player.
         """
+
         # initialize the new game as unfinished
         self._game_state = 'UNFINISHED'
         # used to create and display the board
@@ -26,6 +31,8 @@ class HasamiShogiGame:
                                   "BLACK": 0,
                                   "RED": 0,
                                  }
+        # start Pygame
+        self.graphics = RenderGame()
 
     def create_board(self):
         """
@@ -47,6 +54,7 @@ class HasamiShogiGame:
                 # the rest of the board starts empty
                 else:
                     new_board[letter + str(col_num)] = '.'
+        self.graphics.render_board(new_board)
         return new_board
 
     def get_game_state(self):
@@ -444,3 +452,4 @@ new_game.print_board()
 print("RED CAPPED", new_game.get_num_captured_pieces("RED"))
 print("BLACK CAPPED", new_game.get_num_captured_pieces("BLACK"))
 """
+
