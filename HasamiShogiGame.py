@@ -17,7 +17,6 @@ class HasamiShogiGame:
         Creates a new game of Hasami Shogi with private data members for the game state, the player turn,
         and the number of captured pieces per player.
         """
-
         # initialize the new game as unfinished
         self._game_state = 'UNFINISHED'
         # used to create and display the board
@@ -31,9 +30,6 @@ class HasamiShogiGame:
                                   "BLACK": 0,
                                   "RED": 0,
                                  }
-        # start Pygame
-        self.graphics = RenderGame()
-
     def create_board(self):
         """
         Create the game board using a dictionary. The keys of each item use
@@ -54,7 +50,7 @@ class HasamiShogiGame:
                 # the rest of the board starts empty
                 else:
                     new_board[letter + str(col_num)] = '.'
-        self.graphics.render_board(new_board)
+
         return new_board
 
     def get_game_state(self):
@@ -71,8 +67,8 @@ class HasamiShogiGame:
 
     def get_num_captured_pieces(self, player):
         """
-        Takes the player color as a parameter and returns the number of pieces belonging
-        to that player that have been captured.
+        Returns the number of pieces captured belonging to either player
+        'RED' or 'BLACK' depending on the argument.
         """
         # obtain the value by using the player color argument as the key
         num_of_pieces = self._captured_pieces.get(player)
