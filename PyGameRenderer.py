@@ -68,7 +68,7 @@ for x in range(0, WIN_WIDTH, square_size):
 
 # draw a black square around the game board because it looks nice
 border = pygame.Rect(40, 40, board_width + 18, board_height + 18)
-pygame.draw.rect(screen, "BLACK", border, 0)
+pygame.draw.rect(screen, "BLACK", border, 1)
 
 
 
@@ -119,3 +119,13 @@ while True:
         if event.type == pygame.QUIT:
             pygame.quit()
             sys.exit()
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            # get the position of the click
+            pos = pygame.mouse.get_pos()
+            x_coord = (pos[0] - 50) // square_size
+            print(pos)
+            # invert the x coordinate since col 0 is actually col 9 on the board
+            print("X coordinate is: ", 9 - x_coord)
+            y_coord = (pos[1] - 50) // square_size
+            if y_coord >= 0 and y_coord < 9:
+                print("Y coordinate is: ", row_letters[y_coord])
