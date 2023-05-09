@@ -65,16 +65,9 @@ for x in range(0, WIN_WIDTH, square_size):
         pygame.draw.rect(board, "BLACK", rect, 1)
 
 
-
 # draw a black square around the game board because it looks nice
 border = pygame.Rect(40, 40, board_width + 18, board_height + 18)
 pygame.draw.rect(screen, "BLACK", border, 1)
-
-
-
-
-# create a rect surface to place the column numbers on
-
 
 
 # add the board to the screen
@@ -125,7 +118,13 @@ while True:
             x_coord = (pos[0] - 50) // square_size
             print(pos)
             # invert the x coordinate since col 0 is actually col 9 on the board
-            print("X coordinate is: ", 9 - x_coord)
+            print("X coordinate is: ", x_coord)
             y_coord = (pos[1] - 50) // square_size
             if y_coord >= 0 and y_coord < 9:
                 print("Y coordinate is: ", row_letters[y_coord])
+            
+                        # find the piece at the clicked position
+            for piece in pieces:
+                # adding one to y_coord to account for first row containing col nums
+                if piece.x == x_coord and piece.y == y_coord + 1:
+                    print("Piece here!")
