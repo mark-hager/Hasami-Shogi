@@ -86,12 +86,26 @@ class Piece:
     def draw(self, surface):
         # draw the piece and place it in the middle of its square
         # width of 0 makes it filled
+        """
         pygame.draw.circle(surface, self.color,
                           (self.x * square_size + (square_size // 2),
                            self.y * square_size - (square_size // 2)),
                            square_size // 3, 0)
-        # img = pygame.image.load(f"images/{self.color}_{self.type}.png")
-        # surface.blit(piece, (self.x*75+10, self.y*75+10))
+        """
+        
+        
+        piece_png = pygame.image.load(f"pieces/{self.color.lower()}_piece.png")
+
+        # red pieces should be rotated 180 degrees as though they are facing opposite player
+        if self.color == "RED":
+            piece_png = pygame.transform.rotate(piece_png, 180)
+
+        # scale the piece pngs using the square size based on the set board resolution
+        piece_png = pygame.transform.smoothscale(piece_png, (square_size, square_size))
+
+        surface.blit(piece_png, (self.x * square_size,
+                                 # not sure why the blited png y coordinate is too high normally
+                           self.y * square_size - (square_size // 2) * 2))
 
 # set up the pieces
 pieces = []
