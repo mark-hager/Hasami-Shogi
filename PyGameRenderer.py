@@ -105,13 +105,13 @@ class Piece:
 
         surface.blit(piece_png, (self.x * square_size,
                                  # not sure why the blited png y coordinate is too high normally
-                           self.y * square_size - (square_size // 2) * 2))
+                           self.y * square_size))
 
 # set up the pieces
 pieces = []
 for i in range(COLS):
-    pieces.append(Piece("RED", i, 1, "pawn"))
-    pieces.append(Piece("BLACK", i, 9, "pawn"))
+    pieces.append(Piece("RED", i, 0, "pawn"))
+    pieces.append(Piece("BLACK", i, 8, "pawn"))
 
 # draw the pieces
 for piece in pieces:
@@ -139,6 +139,6 @@ while True:
             
                         # find the piece at the clicked position
             for piece in pieces:
-                # adding one to y_coord to account for first row containing col nums
-                if piece.x == x_coord and piece.y == y_coord + 1:
+
+                if piece.x == x_coord and piece.y == y_coord:
                     print("Piece here!")
