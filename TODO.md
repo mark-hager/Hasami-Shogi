@@ -12,7 +12,7 @@ portfolio!
 
 ### Bugs and issues
 
-- [ ] Correct the corner capture bug pointed our by my reviewer
+- [ ] Correct the corner capture bug pointed out by my reviewer
   - Captures are given to the incorrect player
 - [ ] Remove all code smells
 

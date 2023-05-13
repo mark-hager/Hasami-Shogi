@@ -48,7 +48,7 @@ for x in range(0, WIN_WIDTH, square_size):
         rect = pygame.Rect(x, y, square_size, square_size)
         # render the column numbers
         if y == 0 and x > 0 and col_num > 0:
-            col_rect = pygame.Rect(x, 10, square_size, 0)
+            col_rect = pygame.Rect(x + 10, 10, square_size, 0)
             col_text = my_font.render(str(col_num), True, (0, 0, 0))
             screen.blit(col_text, col_rect)
             # decrement col num

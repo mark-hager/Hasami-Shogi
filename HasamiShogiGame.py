@@ -420,32 +420,4 @@ class HasamiShogiGame:
 
             print(row_string)
 new_game = HasamiShogiGame()
-#new_game.print_board()
-#print(new_game.get_square_occupant('i9'))
-new_game.make_move('i1', 'b1')
-new_game.make_move('a2', 'g2')
-new_game.make_move('i3', 'b3')
-new_game.make_move('g2','g1')
-new_game.make_move('b3','b2')
-new_game.make_move('a3','h3')
-new_game.make_move('i2','i1')
-new_game.make_move('g1','h1')
-# following move correctly gives corner capture point to black
-new_game.make_move('b2','a2')
-print("RED PAWNS CAPPED", new_game.get_num_captured_pieces("RED"))
-print("BLACK PAWNS CAPPED", new_game.get_num_captured_pieces("BLACK"))
-
-new_game.make_move('h3','i3')
-new_game.make_move('i9','b9')
-new_game.print_board()
-# following move incorrectly gives corner capture point to red
-new_game.make_move('i3','i2')
-new_game.print_board()
-print("RED PAWNS CAPPED", new_game.get_num_captured_pieces("RED"))
-print("BLACK PAWNS CAPPED", new_game.get_num_captured_pieces("BLACK"))
-"""
-new_game.print_board()
-print("RED CAPPED", new_game.get_num_captured_pieces("RED"))
-print("BLACK CAPPED", new_game.get_num_captured_pieces("BLACK"))
-"""
 
