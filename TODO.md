@@ -12,9 +12,13 @@ portfolio!
 
 ### Bugs and issues
 
-- [ ] Correct the corner capture bug pointed out by my reviewer
+- [ ] Correct the corner capture bug pointed our by my reviewer
   - Captures are given to the incorrect player
+  - Cannot get your own pieces captured by incorrect move?
 - [ ] Remove all code smells
+- [x] fix coordinate system so that either xy or yx is consistent. preferably xy, but board is currently made up of rows of columns.
+- [x] figure out how to remove highlighting from squares without needing to redraw the entire board?
+- [ ] Draw something on the board indicating whose turn it is
 
 ### Done ✓
 
