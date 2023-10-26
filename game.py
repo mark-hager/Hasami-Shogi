@@ -142,9 +142,6 @@ class Game:
         x, y = pos
         # check for special corner captures - separate method needed?
 
-        # *TODO* should refactor and check entire board for all possible captures to account for moves
-        # that result in active players pieces getting captured
-
         
         # check for captures above piece
         if y > 1:
