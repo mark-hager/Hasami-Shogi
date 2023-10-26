@@ -62,8 +62,8 @@ class Game:
                 elif y == 8:
                     new_board[ (x, y) ] = 'BLACK'
                 # the rest of the board starts empty
-                else:
-                    new_board[ (x, y) ] = '.'
+                #else:
+                #    new_board[ (x, y) ] = '.'
 
         return new_board
 
@@ -85,28 +85,28 @@ class Game:
 
         if x < self.COLS - 1:
             for col in range(x + 1, self.COLS):
-                if self.board.get( (col, y) ) == '.':
+                if not self.board.get( (col, y) ):
                     legal_moves.add( (col, y) )
                 else:
                     break
         # then look to the left
         if x > 0:
             for col in range(x - 1, -1, -1):
-                if self.board.get( (col, y) ) == '.':
+                if not self.board.get( (col, y) ):
                     legal_moves.add( (col, y) )
                 else:
                     break
         # check vertical spaces starting with squares below origin
         if y < self.ROWS - 1:
             for row in range(y + 1, self.ROWS):
-                if self.board.get( (x, row) ) == '.':
+                if not self.board.get( (x, row) ):
                     legal_moves.add( (x, row ))
                 else:
                     break
         # then look at squares above origin
         if y > 0:
             for row in range(y - 1, -1, -1):
-                if self.board.get( (x, row) ) == '.':
+                if not self.board.get( (x, row) ):
                     legal_moves.add( (x, row) )
                 else:
                     break
@@ -183,10 +183,11 @@ class Game:
         # update the board: copy the piece to the clicked square,
         self.board[ (destination) ] = self._active_player
         # remove it from its origin,
-        self.board[ (origin) ] = '.'
+        del self.board[ (origin) ]
+        #self.board[ (origin) ] = '.'
 
         # checking if the move makes any captures
-        self.check_captures(destination)
+        #self.check_captures(destination)
 
         # and redraw the shogi board
         self.graphics.draw(self.board)
