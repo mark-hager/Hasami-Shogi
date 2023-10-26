@@ -5,8 +5,6 @@ Contains classes and methods for creating a new game of Hasami Shogi
 import pygame
 
 import graphics
-# contains rules and logic for Hasami Shogi Variant 1. May add other variants in future.
-from shogi_var1 import ShogiVar1
 
 class Game:
     """
@@ -37,6 +35,7 @@ class Game:
                                   "BLACK": 0,
                                   "RED": 0,
                                  }
+        self._selected_piece = None
         # initialize the new game as unfinished
         self.running = True
         # draw the pieces onto the board
@@ -233,20 +232,20 @@ class Game:
                     # check that clicked square contains piece belonging to active player
                     if self.board.get(clicked_square) == self._active_player:
 
-                        selected_piece = clicked_square
+                        self._selected_piece = clicked_square
                         # refresh the board/clear any existing highlights
                         self.graphics.draw(self.board)
                         # show all available moves from origin
-                        possible_moves = self.test_move(selected_piece)
+                        possible_moves = self.test_move(self._selected_piece)
                         # highlight the squares that the selected piece can legally move to
                         self.graphics.highlight_square(possible_moves)
 
                     # also check if clicked square is a legal move for the selected piece.
-                    elif selected_piece and clicked_square in possible_moves:
+                    elif self._selected_piece and clicked_square in possible_moves:
                         # call make move method
-                        self.make_move(selected_piece, clicked_square)
+                        self.make_move(self._selected_piece, clicked_square)
                         # reset the selected piece and move set once the move is made
-                        selected_piece = None
+                        self._selected_piece = None
                         possible_moves = None
 
               #  else:
@@ -256,7 +255,7 @@ class Game:
             # redraw the pygame board
             #self.graphics.draw(self.board)
             pygame.display.update()
-            self.FPS.tick(60)
+            self.FPS.tick(30)
 
 
 if __name__ == "__main__":
