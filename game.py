@@ -31,9 +31,9 @@ class Game:
         # initialize player turn to black as they always start
         self._active_player = "BLACK"
         # initialize dictionary to hold how many pieces lost by each player
-        self._captured_pieces = {
-                                  "BLACK": 0,
-                                  "RED": 0,
+        self._pieces_remaining = {
+                                  "BLACK": 9,
+                                  "RED": 9,
                                  }
         self._selected_piece = None
         # initialize the new game as unfinished
@@ -165,7 +165,7 @@ class Game:
             n = 1
             temp_caps = []
             while self.board.get( (x, y + n) ) == opponent:
-                temp_caps.append( (x, y + n) )
+                temp_caps.append( (x, y + n) ) 
                 n += 1
             if n > 1:
                 if self.board.get( (x, y + n) ) == self._active_player:
@@ -191,7 +191,7 @@ class Game:
             n = 1
             temp_caps = []
             while self.board.get( (x + n, y) ) == opponent:
-                temp_caps.append( (x + n, y) )
+                temp_caps.append( ( x + n, y) )
                 n += 1
             if n > 1:
                 if self.board.get( (x + n, y) ) == self._active_player:
@@ -220,8 +220,19 @@ class Game:
 
         # remove captured pieces from the board
         for piece in cap_list:
+            print(piece)
+            # record whether the captured piece was black or red
+            if self.board[piece] == "BLACK":
+                self._pieces_remaining["BLACK"] -= 1
+                print("BLACK PIECE CAPTURED!")
+            else:
+                self._pieces_remaining["RED"] -= 1
+                print("RED PIECE CAPTURED!")
+
+            # and delete the captured piece from the game board
             del self.board[ (piece) ]
             
+            #*TODO* logic that ends game if pieces remaining == 1
         # and redraw the shogi board
         self.graphics.draw(self.board)
 
