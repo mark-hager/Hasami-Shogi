@@ -142,30 +142,62 @@ class Game:
         x, y = pos
         # check for special corner captures - separate method needed?
 
+        # these need to check for n < 8 pieces being captured, not just one
         
+        # represents number of pieces to get captured, max = 7
+
+
         # check for captures above piece
         if y > 1:
-            if self.board.get( (x, y - 1) ) == opponent and self.board.get( (x, y - 2) ) == self._active_player:
-                capture_list.append(self.board[x, y - 1])
-                print("TOP CAPTURE")
+            n = 1
+            temp_caps = []
+            while self.board.get( (x, y - n) ) == opponent:
+                temp_caps.append( (x, y - n) )
+                n += 1
+                
+            if n > 1:
+                if self.board.get( (x, y - n) ) == self._active_player:
+                    for piece in temp_caps:
+                        capture_list.append(piece)
 
         # check for captures below piece
         if y < self.ROWS - 2:
-            if self.board.get( (x, y + 1) ) == opponent and self.board.get( (x, y + 2) ) == self._active_player:
-                capture_list.append(self.board[x, y  + 1])
-                print("BOTTOM CAPTURE")
+            n = 1
+            temp_caps = []
+            while self.board.get( (x, y + n) ) == opponent:
+                temp_caps.append( (x, y + n) )
+                n += 1
+            if n > 1:
+                if self.board.get( (x, y + n) ) == self._active_player:
+                    for piece in temp_caps:
+                        capture_list.append(piece)
+
 
         # check for captures left of piece
         if x > 1:
-            if self.board.get ( (x - 1, y) ) == opponent and self.board.get( (x - 2, y) ) == self._active_player:
-                capture_list.append(self.board[x - 1, y])
-                print("LEFT CAPTURE")
+            n = 1
+            temp_caps = []
+            while self.board.get( (x - n, y) ) == opponent:
+                temp_caps.append( (x - n, y) )
+                n += 1
+                
+            if n > 1:
+                if self.board.get( (x - n, y) ) == self._active_player:
+                    for piece in temp_caps:
+                        capture_list.append(piece)
 
         # check for captures right of piece
-        if x < self.COLS - 2:
-            if self.board.get( (x + 1, y) ) == opponent and self.board.get( (x + 2, y) ) == self._active_player:
-                capture_list.append(self.board[x + 1, y])
-                print("RIGHT CAPTURE")
+        if y < self.COLS - 2:
+            n = 1
+            temp_caps = []
+            while self.board.get( (x + n, y) ) == opponent:
+                temp_caps.append( (x + n, y) )
+                n += 1
+            if n > 1:
+                if self.board.get( (x + n, y) ) == self._active_player:
+                    for piece in temp_caps:
+                        capture_list.append(piece)
+        
 
         return capture_list
 
@@ -184,8 +216,12 @@ class Game:
         #self.board[ (origin) ] = '.'
 
         # checking if the move makes any captures
-        #self.check_captures(destination)
+        cap_list = self.check_captures(destination)
 
+        # remove captured pieces from the board
+        for piece in cap_list:
+            del self.board[ (piece) ]
+            
         # and redraw the shogi board
         self.graphics.draw(self.board)
 
