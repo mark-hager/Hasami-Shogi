@@ -187,7 +187,7 @@ class Game:
                         capture_list.append(piece)
 
         # check for captures right of piece
-        if y < self.COLS - 2:
+        if x < self.COLS - 2:
             n = 1
             temp_caps = []
             while self.board.get( (x + n, y) ) == opponent:
