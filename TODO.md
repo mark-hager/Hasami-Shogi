@@ -18,7 +18,8 @@ portfolio!
 - [x] fix coordinate system so that either xy or yx is consistent. preferably xy, but board is currently made up of rows of columns.
 - [x] figure out how to remove highlighting from squares without needing to redraw the entire board?
 - [ ] Draw something on the board indicating whose turn it is
-
+- [x] Red (0, 7) is not right-capping black on (0, 8)? also occuring with red right cap on (0, 8)
+ 
 ### Done ✓
 
 - [x] Create a TODO.md!
