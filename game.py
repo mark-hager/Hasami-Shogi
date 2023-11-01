@@ -132,21 +132,26 @@ class Game:
         """
         # initialize a list to hold capture positions to send back to make_move
         capture_list = []
+        
+        # if origin is in corner cap position, then check if corner capture
+        corner_cap_positions = { (0, 1), (1, 0), (7, 0), (8, 1),
+                                   (0, 7), (1, 8), (7, 8), (8, 7) }
 
         # get the opposing player
         if self._active_player == "BLACK":
             opponent = "RED"
         else:
             opponent = "BLACK"
-     
-        x, y = pos
-        # check for special corner captures - separate method needed?
-
-        # these need to check for n < 8 pieces being captured, not just one
         
-        # represents number of pieces to get captured, max = 7
+        # check for special corner captures
+        if pos in corner_cap_positions:
+            corner_capture = self.check_corner_cap(pos, opponent)
+            # returns None if no corner captures
+            if corner_capture is not None:
+                capture_list.append(corner_capture)
 
-
+        x, y = pos
+  
         # check for captures above piece
         if y > 1:
             n = 1
@@ -201,7 +206,50 @@ class Game:
 
         return capture_list
 
+    def check_corner_cap(self, origin, opponent):
+        """
+        Helper method called by check_captures to check
+        for special corner_captures.
+        """
+        x, y = origin
 
+        # will hold any captured corner piece
+        capture = None
+        top_left = { (0, 1), (1, 0) }
+        top_right = { (7, 0), (8, 1) }
+        bottom_left = { (0, 7), (1, 8) }
+        bottom_right = { (7, 8), ( 8, 7) }
+
+        if origin in top_left:
+            for pos in top_left:
+                if self.board.get(pos) != self._active_player:
+                    return None
+            if self.board.get( (0, 0) ) == opponent:
+                capture = (0, 0)
+                
+        elif origin in top_right:
+           for pos in top_right:
+                if self.board.get(pos) != self._active_player:
+                    return None
+           if self.board.get( (8, 0) ) == opponent:
+                capture = (8, 0)
+
+        elif origin in bottom_left:
+            for pos in bottom_left:
+                if self.board.get(pos) != self._active_player:
+                    return None
+            if self.board.get( (0, 8) ) == opponent:
+                capture = (0, 8)
+
+        elif origin in bottom_right:
+            for pos in bottom_right:
+                if self.board.get(pos) != self._active_player:
+                    return None
+            if self.board.get( (8, 8) ) == opponent:
+                capture = (8, 8)
+
+        return capture
+    
     def make_move(self, origin, destination):
         """
         Moves the active player's selected piece.

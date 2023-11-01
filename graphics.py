@@ -100,7 +100,8 @@ class Graphics:
         """
         Render the current board state
         """
-
+        # *TODO* display whose turn it is and whether game is active
+        
         # redraw the board only
 
         self.board.fill((250, 250, 180))
