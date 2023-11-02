@@ -39,7 +39,7 @@ class Game:
         # initialize the new game as unfinished
         self.running = True
         # draw the pieces onto the board
-        self.graphics.draw(self.board)
+        self.graphics.draw(self.board, self._active_player)
         self.FPS = pygame.time.Clock()
 
 
@@ -254,7 +254,6 @@ class Game:
         """
         Moves the active player's selected piece.
         Updates the board
-        *TODO* check for captures or in separate method?
         """
         print("Selected piece: " + str(origin))
         # update the board: copy the piece to the clicked square,
@@ -281,11 +280,11 @@ class Game:
             del self.board[ (piece) ]
             
             #*TODO* logic that ends game if pieces remaining == 1
-        # and redraw the shogi board
-        self.graphics.draw(self.board)
 
         # switch the active player following a legal move
         self.update_turn()
+        # and redraw the shogi board
+        self.graphics.draw(self.board, self._active_player)
 
 
     def update_turn(self):
@@ -327,7 +326,7 @@ class Game:
 
                         self._selected_piece = clicked_square
                         # refresh the board/clear any existing highlights
-                        self.graphics.draw(self.board)
+                        self.graphics.draw(self.board, self._active_player)
                         # show all available moves from origin
                         possible_moves = self.test_move(self._selected_piece)
                         # highlight the squares that the selected piece can legally move to
@@ -348,7 +347,7 @@ class Game:
             # redraw the pygame board
             #self.graphics.draw(self.board)
             pygame.display.update()
-            self.FPS.tick(30)
+            #self.FPS.tick(30)
 
 
 if __name__ == "__main__":
