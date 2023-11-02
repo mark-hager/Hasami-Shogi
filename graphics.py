@@ -96,13 +96,20 @@ class Graphics:
 
         return board
     
-    def draw(self, pieces):
+    def draw(self, pieces, turn):
         """
         Render the current board state
         """
-        # *TODO* display whose turn it is and whether game is active
-        
-        # redraw the board only
+        pygame.font.init()
+        my_font = pygame.font.SysFont('arial', 20)
+
+        # clear area where the player turn text is displayed
+        status_rect = pygame.Rect( (BOARD_WIDTH - SQUARE_SIZE), WIN_HEIGHT - 35, (SQUARE_SIZE * 3), 30)
+        self.screen.fill((255, 255, 255), status_rect)
+
+        # draw  player turn status text in the cleared area
+        status_text = my_font.render(str(turn + "\'s turn"), True, (turn))
+        self.screen.blit(status_text, status_rect)
 
         self.board.fill((250, 250, 180))
         
