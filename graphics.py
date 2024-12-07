@@ -44,7 +44,7 @@ class Graphics:
         screen = pygame.display.set_mode(size)
         screen.fill("WHITE")
         pygame.display.set_caption("Hasami Shogi")
-        
+
         return screen
 
     def create_board(self):
@@ -69,7 +69,7 @@ class Graphics:
 
                 rect = pygame.Rect(x, y, SQUARE_SIZE, SQUARE_SIZE)
                 # render the column numbers
-                
+
                 if y == 0 and x > 0 and col_num > 0:
                     col_rect = pygame.Rect(x + 10, 10, SQUARE_SIZE, 0)
                     col_text = my_font.render(str(col_num), True, (0, 0, 0))
@@ -95,7 +95,7 @@ class Graphics:
         self.screen.blit(board, (50, 50))
 
         return board
-    
+
     def draw(self, pieces, turn):
         """
         Render the current board state
@@ -104,7 +104,8 @@ class Graphics:
         my_font = pygame.font.SysFont('arial', 20)
 
         # clear area where the player turn text is displayed
-        status_rect = pygame.Rect( (BOARD_WIDTH - SQUARE_SIZE), WIN_HEIGHT - 35, (SQUARE_SIZE * 3), 30)
+        status_rect = pygame.Rect( (BOARD_WIDTH - SQUARE_SIZE),
+                                  WIN_HEIGHT - 35, (SQUARE_SIZE * 3), 30)
         self.screen.fill((255, 255, 255), status_rect)
 
         # draw  player turn status text in the cleared area
@@ -112,7 +113,7 @@ class Graphics:
         self.screen.blit(status_text, status_rect)
 
         self.board.fill((250, 250, 180))
-        
+
         for x in range(0, WIN_WIDTH, SQUARE_SIZE):
             for y in range(0, BOARD_HEIGHT, SQUARE_SIZE):
 
@@ -132,7 +133,7 @@ class Graphics:
                 elif pieces.get( (x, y )) == 'RED':
                     piece = Piece("RED", x, y, "pawn")
                     piece.draw(self.board)
-        
+
 
         self.screen.blit(self.board, (50, 50))
 
@@ -160,7 +161,8 @@ class Graphics:
         """
         for pos in squares:
             # hacky math is to account for borders; does not scale. bad solution
-            rect = pygame.Rect(pos[0] * SQUARE_SIZE + 2, pos[1] * SQUARE_SIZE + 2, SQUARE_SIZE - 4, SQUARE_SIZE - 4)
+            rect = pygame.Rect(pos[0] * SQUARE_SIZE + 2, 
+                               pos[1] * SQUARE_SIZE + 2, SQUARE_SIZE - 4, SQUARE_SIZE - 4)
             self.board.fill(HIGHLIGHT_COLOR, rect)
             self.screen.blit(self.board, (50, 50))
 
@@ -187,7 +189,7 @@ class Piece:
         #if self.selected is False:
           #  rect = pygame.Rect(self.x * SQUARE_SIZE, self.y * SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE)
           #  surface.fill(HIGHLIGHT_COLOR, rect)
-            #pygame.draw.rect(self.board, HIGHLIGHT_COLOR, SQUARE_SIZE) 
+            #pygame.draw.rect(self.board, HIGHLIGHT_COLOR, SQUARE_SIZE)
 
         piece_png = pygame.image.load(f"pieces/{self.color.lower()}_piece.png")
 
@@ -199,4 +201,3 @@ class Piece:
         piece_png = pygame.transform.smoothscale(piece_png, (SQUARE_SIZE, SQUARE_SIZE))
 
         surface.blit(piece_png, (self.x * SQUARE_SIZE, self.y * SQUARE_SIZE))
-

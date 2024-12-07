@@ -1,9 +1,8 @@
 """
 Contains classes and methods for creating a new game of Hasami Shogi
 """
-
+import sys
 import pygame
-
 import graphics
 
 class Game:
@@ -11,7 +10,6 @@ class Game:
     An instance of Hasami Shogi.
     Initializes the game window and represents game state information
     using Pygame by calling functions from graphics.py. 
-    Also importing shogi_var1.py for game logic and rules 
 
     with help from Michael Maranan's Pygame Checkers tutorial:
     https://thepythoncode.com/article/make-a-checkers-game-with-pygame-in-python
@@ -40,7 +38,7 @@ class Game:
         self.running = True
         # draw the pieces onto the board
         self.graphics.draw(self.board, self._active_player)
-        self.FPS = pygame.time.Clock()
+        self.fps = pygame.time.Clock()
 
 
     def create_board(self):
@@ -118,12 +116,12 @@ class Game:
         """
         Method called by make_move to check if any captures
         are made by move.
-        If any pawns
-        of opposing player are adjacent. If yes then checks what is on the opposite site of opposing pawn.
+        First check if any opposing player pawns are adjacent to pawn that was just moved.
+        If yes then checks what is on the opposite site of opposing pawn.
         If it is an empty square or off the board then return False. If it is a pawn belonging
         to the active player then return the position of the captured pawn to make_move.
         If two or more pawns of the opposing player are lined next to pawn then keep checking
-        until there is either an empty square or board boundary or a pawn belonging to the active player.
+        until there is either an empty square, board boundary or pawn belonging to the player.
 
         Also checks for corner captures by calling test_move on the active pawn and one perpendicular
         pawn belonging to the active player surrounding an enemy pawn. Tests movement towards nearest
@@ -132,7 +130,7 @@ class Game:
         """
         # initialize a list to hold capture positions to send back to make_move
         capture_list = []
-        
+
         # if origin is in corner cap position, then check if corner capture
         corner_cap_positions = { (0, 1), (1, 0), (7, 0), (8, 1),
                                    (0, 7), (1, 8), (7, 8), (8, 7) }
@@ -142,7 +140,7 @@ class Game:
             opponent = "RED"
         else:
             opponent = "BLACK"
-        
+
         # check for special corner captures
         if pos in corner_cap_positions:
             corner_capture = self.check_corner_cap(pos, opponent)
@@ -151,7 +149,7 @@ class Game:
                 capture_list.append(corner_capture)
 
         x, y = pos
-  
+
         # check for captures above piece
         if y > 1:
             n = 1
@@ -159,7 +157,7 @@ class Game:
             while self.board.get( (x, y - n) ) == opponent:
                 temp_caps.append( (x, y - n) )
                 n += 1
-                
+
             if n > 1:
                 if self.board.get( (x, y - n) ) == self._active_player:
                     for piece in temp_caps:
@@ -170,7 +168,7 @@ class Game:
             n = 1
             temp_caps = []
             while self.board.get( (x, y + n) ) == opponent:
-                temp_caps.append( (x, y + n) ) 
+                temp_caps.append( (x, y + n) )
                 n += 1
             if n > 1:
                 if self.board.get( (x, y + n) ) == self._active_player:
@@ -185,7 +183,7 @@ class Game:
             while self.board.get( (x - n, y) ) == opponent:
                 temp_caps.append( (x - n, y) )
                 n += 1
-                
+
             if n > 1:
                 if self.board.get( (x - n, y) ) == self._active_player:
                     for piece in temp_caps:
@@ -202,7 +200,7 @@ class Game:
                 if self.board.get( (x + n, y) ) == self._active_player:
                     for piece in temp_caps:
                         capture_list.append(piece)
-        
+
 
         return capture_list
 
@@ -226,13 +224,13 @@ class Game:
                     return None
             if self.board.get( (0, 0) ) == opponent:
                 capture = (0, 0)
-                
+
         elif origin in top_right:
-           for pos in top_right:
+            for pos in top_right:
                 if self.board.get(pos) != self._active_player:
                     return None
-           if self.board.get( (8, 0) ) == opponent:
-                capture = (8, 0)
+                if self.board.get( (8, 0) ) == opponent:
+                    capture = (8, 0)
 
         elif origin in bottom_left:
             for pos in bottom_left:
@@ -249,7 +247,7 @@ class Game:
                 capture = (8, 8)
 
         return capture
-    
+
     def make_move(self, origin, destination):
         """
         Moves the active player's selected piece.
@@ -267,7 +265,6 @@ class Game:
 
         # remove captured pieces from the board
         for piece in cap_list:
-            print(piece)
             # record whether the captured piece was black or red
             if self.board[piece] == "BLACK":
                 self._pieces_remaining["BLACK"] -= 1
@@ -278,7 +275,7 @@ class Game:
 
             # and delete the captured piece from the game board
             del self.board[ (piece) ]
-            
+
             #*TODO* logic that ends game if pieces remaining == 1
 
         # switch the active player following a legal move
@@ -347,7 +344,7 @@ class Game:
             # redraw the pygame board
             #self.graphics.draw(self.board)
             pygame.display.update()
-            #self.FPS.tick(30)
+            #self.fps.tick(30)
 
 
 if __name__ == "__main__":
