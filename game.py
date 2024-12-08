@@ -31,10 +31,12 @@ class Game:
         # initialize dictionary to hold how many pieces lost by each player
         self._pieces_remaining = {
                                   "BLACK": 9,
-                                  "RED": 9,
+                                  "RED": 1,
                                  }
         self._selected_piece = None
         # initialize the new game as unfinished
+        self.winner = None
+        # handles pygame
         self.running = True
         # draw the pieces onto the board
         self.graphics.draw(self.board, self._active_player)
@@ -276,19 +278,26 @@ class Game:
             # and delete the captured piece from the game board
             del self.board[ (piece) ]
 
-            #*TODO* logic that ends game if pieces remaining == 1
-
         # switch the active player following a legal move
-        self.update_turn()
+        self._update_turn()
         # and redraw the shogi board
         self.graphics.draw(self.board, self._active_player)
 
 
-    def update_turn(self):
+    def _update_turn(self):
         """
         Flips the active player depending on whether it's RED or BLACKs turn
-        following a legal move.
+        following a legal move. Ends the game if a player has 1 or 0 pawns remaining.
         """
+
+        if self._pieces_remaining["BLACK"] < 2:
+            self.winner = "RED"
+            return
+
+        if self._pieces_remaining["RED"] < 2:
+            self.winner = "BLACK"
+
+        # else switch the active player
         if self._active_player == "BLACK":
             self._active_player = "RED"
         else:
@@ -307,12 +316,11 @@ class Game:
 
                 if self.event.type == pygame.QUIT:
                     self.running = False
-
                     pygame.quit()
                     sys.exit()
 
                 #if ShogiVar1.get_game_state() != 'UNFINISHED':
-                if self.event.type == pygame.MOUSEBUTTONDOWN:
+                if not self.winner and self.event.type == pygame.MOUSEBUTTONDOWN:
                     # get the position of the click
                     mouse_pos = pygame.mouse.get_pos()
                     # and check that occupant at position matches player whose turn it is
@@ -337,9 +345,9 @@ class Game:
                         self._selected_piece = None
                         possible_moves = None
 
-              #  else:
-                    #game.message()
-                  #  self.running = False
+            if self.winner:
+                #**TODO** add new game button?
+                self.graphics.display_game_over(self.winner)
 
             # redraw the pygame board
             #self.graphics.draw(self.board)

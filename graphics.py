@@ -26,6 +26,9 @@ ROW_LETTERS = ('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i')
 
 pygame.init()
 
+pygame.font.init()
+my_font = pygame.font.SysFont('arial', 20)
+
 class Graphics:
     """
     Class containing methods and attributes to create, update,
@@ -57,8 +60,7 @@ class Graphics:
         board.fill((250, 250, 180))
 
         # render the rows and column coordinates
-        pygame.font.init()
-        my_font = pygame.font.SysFont('arial', 20)
+
 
         # draw the board including col and row nums and letters
         col_num = 9
@@ -100,8 +102,6 @@ class Graphics:
         """
         Render the current board state
         """
-        pygame.font.init()
-        my_font = pygame.font.SysFont('arial', 20)
 
         # clear area where the player turn text is displayed
         status_rect = pygame.Rect( (BOARD_WIDTH - SQUARE_SIZE),
@@ -165,6 +165,36 @@ class Graphics:
                                pos[1] * SQUARE_SIZE + 2, SQUARE_SIZE - 4, SQUARE_SIZE - 4)
             self.board.fill(HIGHLIGHT_COLOR, rect)
             self.screen.blit(self.board, (50, 50))
+
+    def display_game_over(self, winner):
+        """
+        Displays a game over message on the screen including
+        the winner's name.
+        """
+        # Create a semi-transparent overlay
+        overlay = pygame.Surface((WIN_WIDTH // 2, WIN_HEIGHT // 2), pygame.SRCALPHA)
+        overlay.fill((0, 0, 0, 180))  # Black with transparency
+        #self.screen.blit(overlay, (0, 0))
+
+        # Set up font and message
+        pygame.font.init()
+        font = pygame.font.SysFont('arial', 40, bold=True)
+        game_over_text = "Game Over"
+        winner_text = f"{winner} Wins!"
+
+        # Render the messages
+        game_over_surface = font.render(game_over_text, True, (255, 215, 0)) # nice gold color
+        winner_surface = font.render(winner_text, True, (winner))            # use the winning color
+
+        # Calculate positions for centered text
+        game_over_rect = game_over_surface.get_rect(center=(WIN_WIDTH // 2, WIN_HEIGHT // 2 - 40))
+        winner_rect = winner_surface.get_rect(center=(WIN_WIDTH // 2, WIN_HEIGHT // 2 + 20))
+
+        # Blit the messages onto the screen
+        self.screen.blit(game_over_surface, game_over_rect)
+        self.screen.blit(winner_surface, winner_rect)
+
+
 
 
 
