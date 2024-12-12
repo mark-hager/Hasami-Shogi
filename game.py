@@ -329,7 +329,7 @@ class Game:
                 # next check if reset button clicked - only time we care about mouse up
                 # helps debounce and prevent accidental clicks
                 if self.event.type == pygame.MOUSEBUTTONUP:
-
+                    mouse_up = pygame.mouse.get_pos()
                     # ensure reset button was both clicked and released
                     if self.graphics.button_press(mouse_pos) and self.graphics.button_press(mouse_up):
                         self.reset_game_state()
