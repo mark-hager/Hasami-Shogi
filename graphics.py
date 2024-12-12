@@ -27,7 +27,7 @@ ROW_LETTERS = ('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i')
 pygame.init()
 
 pygame.font.init()
-my_font = pygame.font.SysFont('arial', 20)
+main_font = pygame.font.SysFont('arial', 20)
 
 class Graphics:
     """
@@ -37,6 +37,7 @@ class Graphics:
     def __init__(self):
         self.screen = self.create_screen()
         self.board = self.create_board()
+        self.restart = self.new_game_button()
 
 
     def create_screen(self):
@@ -74,7 +75,7 @@ class Graphics:
 
                 if y == 0 and x > 0 and col_num > 0:
                     col_rect = pygame.Rect(x + 10, 10, SQUARE_SIZE, 0)
-                    col_text = my_font.render(str(col_num), True, (0, 0, 0))
+                    col_text = main_font.render(str(col_num), True, (0, 0, 0))
                     self.screen.blit(col_text, col_rect)
                     # decrement col num
                     col_num = int(col_num) - 1
@@ -82,7 +83,7 @@ class Graphics:
                 # render the row letters
                 if y > 0 and x > BOARD_WIDTH:
                     row_rect = pygame.Rect(WIN_WIDTH - 25, y, SQUARE_SIZE, 0)
-                    row_text = my_font.render(ROW_LETTERS[row_index], True, (0, 0, 0))
+                    row_text = main_font.render(ROW_LETTERS[row_index], True, (0, 0, 0))
                     self.screen.blit(row_text, row_rect)
                     # increment the row index to get the next letter
                     row_index += 1
@@ -109,7 +110,7 @@ class Graphics:
         self.screen.fill((255, 255, 255), status_rect)
 
         # draw  player turn status text in the cleared area
-        status_text = my_font.render(str(turn + "\'s turn"), True, (turn))
+        status_text = main_font.render(str(turn + "\'s turn"), True, (turn))
         self.screen.blit(status_text, status_rect)
 
         self.board.fill((250, 250, 180))
@@ -141,7 +142,7 @@ class Graphics:
     def get_occupant(self, pos):
         """
         Check if piece exists at the coordinates from the mouseclick event.
-        If exits then return piece.
+        If one exists then return piece.
         """
 
         row = (pos[0] - 50) // SQUARE_SIZE
@@ -166,34 +167,61 @@ class Graphics:
             self.board.fill(HIGHLIGHT_COLOR, rect)
             self.screen.blit(self.board, (50, 50))
 
+    def new_game_button(self):
+        """
+        Draws a New Game button onto the screen.
+        """
+
+        button_font = pygame.font.SysFont('arial', 15)
+
+        text = button_font.render("New Game", True, "BLACK")
+        rect = pygame.Rect(50, WIN_HEIGHT - 35, (SQUARE_SIZE * 1.5), 30)
+        # draw the button outline
+
+        pygame.draw.rect(self.screen, "BLACK", rect, 1)
+        # get the rect of the text and center it in the button rect
+        text_rect = text.get_rect(center=rect.center)
+
+        self.screen.blit(text, text_rect)
+        # return the new game rect to the constructor to check for presses later
+        return rect
+
+    def button_press(self, pos):
+        """
+        Checks for button presses -
+        Currently only has one (new game) button
+        """
+        return self.restart.collidepoint(pos)
+
+
+
     def display_game_over(self, winner):
         """
         Displays a game over message on the screen including
         the winner's name.
         """
-        # Create a semi-transparent overlay
-        overlay = pygame.Surface((WIN_WIDTH // 2, WIN_HEIGHT // 2), pygame.SRCALPHA)
-        overlay.fill((0, 0, 0, 180))  # Black with transparency
-        #self.screen.blit(overlay, (0, 0))
 
         # Set up font and message
-        pygame.font.init()
-        font = pygame.font.SysFont('arial', 40, bold=True)
+        font = pygame.font.SysFont('arial', 75, bold=True)
         game_over_text = "Game Over"
         winner_text = f"{winner} Wins!"
 
         # Render the messages
-        game_over_surface = font.render(game_over_text, True, (255, 215, 0)) # nice gold color
+        game_over_surface = font.render(game_over_text, True, (255, 180, 0)) # nice gold color
+
+        game_over_shadow = font.render(game_over_text, True, (0, 0, 0))      # black shadow
+
         winner_surface = font.render(winner_text, True, (winner))            # use the winning color
 
         # Calculate positions for centered text
-        game_over_rect = game_over_surface.get_rect(center=(WIN_WIDTH // 2, WIN_HEIGHT // 2 - 40))
-        winner_rect = winner_surface.get_rect(center=(WIN_WIDTH // 2, WIN_HEIGHT // 2 + 20))
+        game_over_rect = game_over_surface.get_rect(center=(WIN_WIDTH // 2, WIN_HEIGHT // 2 - 50))
+        winner_rect = winner_surface.get_rect(center=(WIN_WIDTH // 2, WIN_HEIGHT // 2 + 30))
 
         # Blit the messages onto the screen
+
+        self.screen.blit(game_over_shadow, (game_over_rect.x - 3, game_over_rect.y - 3))
         self.screen.blit(game_over_surface, game_over_rect)
         self.screen.blit(winner_surface, winner_rect)
-
 
 
 
@@ -215,12 +243,6 @@ class Piece:
         draw the piece and place it in the middle of its square
         width of 0 makes it filled
         """
-
-        #if self.selected is False:
-          #  rect = pygame.Rect(self.x * SQUARE_SIZE, self.y * SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE)
-          #  surface.fill(HIGHLIGHT_COLOR, rect)
-            #pygame.draw.rect(self.board, HIGHLIGHT_COLOR, SQUARE_SIZE)
-
         piece_png = pygame.image.load(f"pieces/{self.color.lower()}_piece.png")
 
         # red pieces should be rotated 180 degrees as though they are facing opposite player

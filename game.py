@@ -22,6 +22,18 @@ class Game:
         # initialize the window and the game board.
         # window size is currently defined in graphics.py but may make dynamic later
         self.graphics = graphics.Graphics()
+        # handles pygame
+        self.running = True
+        self.fps = pygame.time.Clock()
+
+        # initialize new game state
+        self.reset_game_state()
+
+    def reset_game_state(self):
+        """
+        Resets the game state to its initial conditions.
+        called when the player clicks the new game button.
+        """
 
         # track the board state using a dictionary
         # pawns are recorded using xy coords as keys in a tuple
@@ -31,16 +43,13 @@ class Game:
         # initialize dictionary to hold how many pieces lost by each player
         self._pieces_remaining = {
                                   "BLACK": 9,
-                                  "RED": 1,
+                                  "RED": 9,
                                  }
         self._selected_piece = None
         # initialize the new game as unfinished
         self.winner = None
-        # handles pygame
-        self.running = True
         # draw the pieces onto the board
         self.graphics.draw(self.board, self._active_player)
-        self.fps = pygame.time.Clock()
 
 
     def create_board(self):
@@ -310,8 +319,6 @@ class Game:
         """
         while self.running is True:
 
-            #game.check_move(display)
-
             for self.event in pygame.event.get():
 
                 if self.event.type == pygame.QUIT:
@@ -319,35 +326,44 @@ class Game:
                     pygame.quit()
                     sys.exit()
 
-                #if ShogiVar1.get_game_state() != 'UNFINISHED':
-                if not self.winner and self.event.type == pygame.MOUSEBUTTONDOWN:
+                # next check if reset button clicked - only time we care about mouse up
+                # helps debounce and prevent accidental clicks
+                if self.event.type == pygame.MOUSEBUTTONUP:
+
+                    # ensure reset button was both clicked and released
+                    if self.graphics.button_press(mouse_pos) and self.graphics.button_press(mouse_up):
+                        self.reset_game_state()
+
+                if self.event.type == pygame.MOUSEBUTTONDOWN:
                     # get the position of the click
                     mouse_pos = pygame.mouse.get_pos()
-                    # and check that occupant at position matches player whose turn it is
-                    clicked_square = self.graphics.get_occupant(mouse_pos)
+                    if not self.winner:
 
-                    # check that clicked square contains piece belonging to active player
-                    if self.board.get(clicked_square) == self._active_player:
+                        # and check that occupant at position matches player whose turn it is
+                        clicked_square = self.graphics.get_occupant(mouse_pos)
 
-                        self._selected_piece = clicked_square
-                        # refresh the board/clear any existing highlights
-                        self.graphics.draw(self.board, self._active_player)
-                        # show all available moves from origin
-                        possible_moves = self.test_move(self._selected_piece)
-                        # highlight the squares that the selected piece can legally move to
-                        self.graphics.highlight_square(possible_moves)
+                        # check that clicked square contains piece belonging to active player
+                        if self.board.get(clicked_square) == self._active_player:
 
-                    # also check if clicked square is a legal move for the selected piece.
-                    elif self._selected_piece and clicked_square in possible_moves:
-                        # call make move method
-                        self.make_move(self._selected_piece, clicked_square)
-                        # reset the selected piece and move set once the move is made
-                        self._selected_piece = None
-                        possible_moves = None
+                            self._selected_piece = clicked_square
+                            # refresh the board/clear any existing highlights
+                            self.graphics.draw(self.board, self._active_player)
+                            # show all available moves from origin
+                            possible_moves = self.test_move(self._selected_piece)
+                            # highlight the squares that the selected piece can legally move to
+                            self.graphics.highlight_square(possible_moves)
+
+                        # also check if clicked square is a legal move for the selected piece.
+                        elif self._selected_piece and clicked_square in possible_moves:
+                            # call make move method
+                            self.make_move(self._selected_piece, clicked_square)
+                            # reset the selected piece and move set once the move is made
+                            self._selected_piece = None
+                            possible_moves = None
 
             if self.winner:
-                #**TODO** add new game button?
                 self.graphics.display_game_over(self.winner)
+
 
             # redraw the pygame board
             #self.graphics.draw(self.board)
