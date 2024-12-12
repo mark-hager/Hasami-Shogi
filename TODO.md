@@ -7,17 +7,17 @@ portfolio!
 
 - [ ] Add Variant 2: Dai hasami shogi
   - currently only has variant 1
-- [ ] Decide on a GUI/graphical option
-  - [ ] Implement the GUI/graphical option
+- [x] Decide on a GUI/graphical option
+  - [x] Implement the GUI/graphical option
 
 ### Bugs and issues
 
-- [ ] Correct the corner capture bug pointed our by my reviewer
+- [x] Correct the corner capture bug pointed our by my reviewer
   - Captures are given to the incorrect player
-- [ ] Remove all code smells
+- [x] Remove all code smells
 - [x] fix coordinate system so that either xy or yx is consistent. preferably xy, but board is currently made up of rows of columns.
 - [x] figure out how to remove highlighting from squares without needing to redraw the entire board?
-- [ ] Draw something on the board indicating whose turn it is
+- [x] Draw something on the board indicating whose turn it is
 - [x] Red (0, 7) is not right-capping black on (0, 8)? also occuring with red right cap on (0, 8)
  
 ### Done ✓
